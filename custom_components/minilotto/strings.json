@@ -1,0 +1,31 @@
+{
+  "title": "Mini Lotto Predictor",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Mini Lotto Setup",
+        "description": "Configure the Mini Lotto prediction system. Data directory is where models, predictions, and accuracy files are stored.",
+        "data": {
+          "data_dir": "Data directory",
+          "data_url": "Lottery data source URL",
+          "scan_interval_hours": "Pipeline run interval (hours)",
+          "notify_service": "Notification service (e.g. notify.mobile_app_phone)"
+        }
+      }
+    },
+    "error": {
+      "cannot_create_dir": "Cannot create data directory. Check permissions."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Mini Lotto Options",
+        "data": {
+          "scan_interval_hours": "Pipeline run interval (hours)",
+          "notify_service": "Notification service"
+        }
+      }
+    }
+  }
+}

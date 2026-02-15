@@ -1,0 +1,7 @@
+run_pipeline:
+  name: Run Pipeline
+  description: "Run the full Mini Lotto daily pipeline (update data, check accuracy, recalculate, predict)."
+
+retrain_models:
+  name: Retrain Models
+  description: "Force retrain all LightGBM models, then run predictions."
