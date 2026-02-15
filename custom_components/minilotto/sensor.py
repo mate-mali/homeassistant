@@ -3,8 +3,11 @@ Sensor entities for Mini Lotto integration.
 Exposes prediction data, accuracy, and pipeline status to HA.
 """
 
+from __future__ import annotations
+
 import logging
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from homeassistant.components.sensor import (
     SensorEntity,
@@ -17,7 +20,9 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
-from .coordinator import MiniLottoCoordinator
+
+if TYPE_CHECKING:
+    from .coordinator import MiniLottoCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -28,6 +33,8 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Mini Lotto sensors from a config entry."""
+    from .coordinator import MiniLottoCoordinator  # noqa: E402 — lazy import
+
     coordinator: MiniLottoCoordinator = hass.data[DOMAIN][entry.entry_id]
 
     sensors = [

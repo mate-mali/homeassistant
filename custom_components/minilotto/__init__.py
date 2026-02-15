@@ -20,7 +20,11 @@ from .const import (
     SERVICE_RUN_PIPELINE,
     SERVICE_RETRAIN,
 )
-from .coordinator import MiniLottoCoordinator
+
+# NOTE: Do NOT import coordinator or engine modules at module level.
+# Heavy dependencies (pandas, lightgbm, etc.) would be loaded when HA
+# imports this package to show the config flow, before requirements
+# are guaranteed to be installed.
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -29,6 +33,8 @@ PLATFORMS = ["sensor"]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Mini Lotto from a config entry."""
+    from .coordinator import MiniLottoCoordinator  # noqa: E402 — lazy import
+
     hass.data.setdefault(DOMAIN, {})
 
     data_dir = entry.data.get("data_dir", "/config/minilotto")

@@ -15,6 +15,9 @@
     },
     "error": {
       "cannot_create_dir": "Cannot create data directory. Check permissions."
+    },
+    "abort": {
+      "already_configured": "Mini Lotto is already configured."
     }
   },
   "options": {

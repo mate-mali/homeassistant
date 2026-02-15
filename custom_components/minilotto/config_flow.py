@@ -27,13 +27,17 @@ class MiniLottoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(self, user_input=None):
         """Handle the initial step — user clicks 'Add Integration'."""
+        # Only allow one instance
+        await self.async_set_unique_id(DOMAIN)
+        self._abort_if_unique_id_configured()
+
         errors = {}
 
         if user_input is not None:
-            # Validate the data directory is writable
+            # Validate the data directory is writable (run in executor to avoid blocking)
             data_dir = user_input.get("data_dir", "/config/minilotto")
             try:
-                os.makedirs(data_dir, exist_ok=True)
+                await self.hass.async_add_executor_job(os.makedirs, data_dir, 0o777, True)
             except OSError:
                 errors["data_dir"] = "cannot_create_dir"
 
@@ -64,20 +68,17 @@ class MiniLottoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
-        return MiniLottoOptionsFlow(config_entry)
+        return MiniLottoOptionsFlow()
 
 
 class MiniLottoOptionsFlow(config_entries.OptionsFlow):
     """Handle options for Mini Lotto."""
 
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        self._config_entry = config_entry
-
     async def async_step_init(self, user_input=None):
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
 
-        current = self._config_entry.data
+        current = self.config_entry.data
 
         return self.async_show_form(
             step_id="init",
